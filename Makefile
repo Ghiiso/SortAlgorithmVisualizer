@@ -2,7 +2,7 @@
 CC := clang
 
 # flags
-CFLAGS := `sdl2-config --libs --cflags` -ggdb3 -O0 --std=c99 -lm
+CFLAGS := `sdl2-config --libs --cflags` -Wall -ggdb3 -O0 --std=c99 -lm
 # header files
 HDRS := Vector2.c scene.c sort.c
 

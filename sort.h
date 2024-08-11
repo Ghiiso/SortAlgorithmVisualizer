@@ -1,12 +1,8 @@
 #ifndef _SORT_H
 #define _SORT_H
 
-/**
- * executes one step of bubble sort algorithm on passed array
-*/
-int bubbleSortStep(int* array, int length);
-/**
- * executes one step of insertion sort algorithm on passed array
-*/
-int insertionSortStep(int* array, int length);
+void bubbleSort(scene_t* scene, int* a, int length);
+void insertionSort(scene_t* scene, int* a, int length);
+void mergeSort(scene_t* scene, int* a, int length, int p, int r);
+void quickSort(scene_t* scene, int arr[], int low, int high, int length);
 #endif

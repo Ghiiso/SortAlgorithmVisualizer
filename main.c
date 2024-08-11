@@ -17,7 +17,16 @@ void DEBUGPRINTARRAY(int* array, int length) {
 }
 
 void printHelp() {
-    printf("\nAvailable algorithms: \n- \"bubble\"\t bubble sort\n- \"insertion\" insertion sort\n");
+    printf("\nAvailable algorithms: \n- \"bubble\"\t bubble sort\n- \"insertion\"\t insertion sort\n- \"merge\"\tmerge sort\n- \"quick\"\tquick sort\n");
+}
+
+int getArgvIndex(const char* argv1) {
+    const char* ALGORITHMS[] = {"bubble", "insertion", "merge", "quick"};
+    int length = sizeof(ALGORITHMS)/sizeof(char*);
+    int result = 0;
+    while(strcmp(argv1, ALGORITHMS[result]) != 0 && result < length)
+        result++;
+    return result;
 }
 
 int main(int argc, char const *argv[]) {
@@ -30,7 +39,6 @@ int main(int argc, char const *argv[]) {
         24, 19, 40, 65, 71, 14, 54, 60, 37, 4, 96, 97, 95, 81, 29, 7, 11, 8, 58, 27
     };
     int length = sizeof(a) / sizeof(int);
-    int iteration = 0;
 
     scene_t scene;
     point_t center = (point_t) {(Vector2) {SCREEN_WIDTH/2, SCREEN_HEIGHT/2}, 0xFFFFFF};
@@ -40,9 +48,35 @@ int main(int argc, char const *argv[]) {
     initScene(&scene);
     srand(time(NULL));
 
-    if(argc == 1)
-        printHelp();
-    
+    switch(argc) {
+        case 1:
+            printHelp();
+            bubbleSort(&scene, a, length);
+            break;
+        case 2:
+            switch(getArgvIndex(argv[1])) {
+                case 0:
+                    bubbleSort(&scene, a, length);
+                    break;
+                case 1:
+                    insertionSort(&scene, a, length);   
+                    break;
+                case 2:
+                    mergeSort(&scene, a, length, 0, length-1);
+                    break;
+                case 3:
+                    quickSort(&scene, a, 0, length-1, length);
+                    break;
+                default:
+                    printHelp();
+                    bubbleSort(&scene, a, length);
+            }
+            break;
+        default:
+            printHelp();
+            exit(1);
+    }
+
     // main loop
     while(!scene.exit) {
         const Uint8* keyboard = SDL_GetKeyboardState(NULL);
@@ -56,24 +90,9 @@ int main(int argc, char const *argv[]) {
                     break;
             }
         }
-        if(keyboard[SDL_SCANCODE_ESCAPE]) scene.exit = 1;
-
-        SDL_RenderClear(scene.renderer);
-            if(keyboard[SDL_SCANCODE_A] && iteration != -1) {
-                switch (argc)
-                {
-                case 2:
-                    if(strcmp(argv[1], "bubble") == 0)
-                        iteration = bubbleSortStep(a, length);
-                    else if(strcmp(argv[1], "insertion") == 0)
-                        iteration = insertionSortStep(a, length);
-                    break;
-                default:
-                    iteration = bubbleSortStep(a, length);
-                }
-            }
-            drawRectangles(a, length, iteration, scene.renderer);
-        SDL_RenderPresent(scene.renderer);
+        if(keyboard[SDL_SCANCODE_ESCAPE]) 
+            scene.exit = 1;
+        drawScene(&scene, a, length, -1); // removes green rectangle
     }
     return 0;
 }

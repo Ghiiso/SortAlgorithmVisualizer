@@ -34,5 +34,6 @@ void drawPoint(scene_t* scene, point_t point);
 */
 void drawRectangle(int x, int y, int width, int height, SDL_Color color, struct SDL_Renderer* renderer);
 void drawRectangles(int *array, int length, int iteration, struct SDL_Renderer *renderer);
-
+void drawScene(scene_t* scene, int* a, int length, int highlightedNumber);
+void handleEvents(scene_t* scene);
 #endif
